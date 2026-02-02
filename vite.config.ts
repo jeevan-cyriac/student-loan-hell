@@ -4,4 +4,5 @@ import yaml from '@rollup/plugin-yaml'
 
 export default defineConfig({
   plugins: [react(), yaml()],
+  base: '/uk-student-loan-hell/',
 })

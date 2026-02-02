@@ -1,22 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: S3 + CloudFront + Route53 for student-loan-hell static site
-
-Parameters:
-  DomainName:
-    Type: String
-    Description: Full domain name (e.g., loans.example.com)
-  HostedZoneId:
-    Type: AWS::Route53::HostedZone::Id
-    Description: Route53 hosted zone ID
-  AcmCertificateArn:
-    Type: String
-    Description: ACM certificate ARN (must be in us-east-1 for CloudFront)
+Description: S3 + CloudFront + Route53 for uk-student-loan-hell
 
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref DomainName
+      BucketName: uk-student-loan-hell
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -42,7 +31,7 @@ Resources:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
       OriginAccessControlConfig:
-        Name: !Sub ${DomainName}-oac
+        Name: uk-student-loan-hell-oac
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
@@ -52,12 +41,12 @@ Resources:
     Properties:
       DistributionConfig:
         Enabled: true
-        DefaultRootObject: index.html
         Aliases:
-          - !Ref DomainName
+          - jeevancyriac.com
         Origins:
           - Id: S3Origin
             DomainName: !GetAtt S3Bucket.RegionalDomainName
+            OriginPath: ''
             S3OriginConfig:
               OriginAccessIdentity: ''
             OriginAccessControlId: !Ref OriginAccessControl
@@ -69,12 +58,12 @@ Resources:
         CustomErrorResponses:
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: /index.html
+            ResponsePagePath: /uk-student-loan-hell/index.html
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: /index.html
+            ResponsePagePath: /uk-student-loan-hell/index.html
         ViewerCertificate:
-          AcmCertificateArn: !Ref AcmCertificateArn
+          AcmCertificateArn: arn:aws:acm:us-east-1:515708633777:certificate/37a8b4ca-165d-4a87-86b7-a129846cd616
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
         HttpVersion: http2and3
@@ -83,19 +72,17 @@ Resources:
   DNSRecord:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZoneId
-      Name: !Ref DomainName
+      HostedZoneId: Z067310534WI2X3D9QMGK
+      Name: jeevancyriac.com
       Type: A
       AliasTarget:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
-        HostedZoneId: Z2FDTNDATAQYW2  # CloudFront hosted zone ID (constant)
+        HostedZoneId: Z2FDTNDATAQYW2
 
 Outputs:
   BucketName:
     Value: !Ref S3Bucket
-  CloudFrontDomainName:
-    Value: !GetAtt CloudFrontDistribution.DomainName
   CloudFrontDistributionId:
     Value: !Ref CloudFrontDistribution
   WebsiteURL:
-    Value: !Sub https://${DomainName}
+    Value: https://jeevancyriac.com/uk-student-loan-hell
