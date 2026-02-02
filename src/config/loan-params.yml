@@ -1,0 +1,157 @@
+# UK Student Loan Parameters
+# Source: Student Loans Company / Gov.UK
+# https://www.gov.uk/repaying-your-student-loan
+# https://www.gov.uk/guidance/how-interest-is-calculated-plan-2
+
+# =============================================================================
+# PLAN 2 (England/Wales, started 2012-2023)
+# =============================================================================
+plan2:
+  name: "Plan 2"
+  description: "England/Wales students who started on or after 1 September 2012"
+
+  # ---------------------------------------------------------------------------
+  # Repayment Thresholds (2024-25)
+  # You only repay when earning above these amounts
+  # ---------------------------------------------------------------------------
+  threshold:
+    yearly: 28470
+    monthly: 2372
+    weekly: 547
+
+  # Upper threshold - above this you pay max interest rate
+  upperThreshold: 51245
+
+  # ---------------------------------------------------------------------------
+  # Repayment Rate
+  # You repay 9% of income ABOVE the threshold
+  # ---------------------------------------------------------------------------
+  repaymentRate: 0.09
+
+  # ---------------------------------------------------------------------------
+  # Interest Rates (1 September 2024 - 31 August 2025)
+  # Based on RPI (Retail Price Index) + up to 3% depending on income
+  #
+  # How it works:
+  # - Income ≤ £28,470: charged RPI only (4.3%)
+  # - Income £28,471 to £51,245: sliding scale from RPI to RPI+3%
+  # - Income ≥ £51,245: charged RPI + 3% (7.3%)
+  #
+  # Interest is added MONTHLY, even if income is below repayment threshold
+  # ---------------------------------------------------------------------------
+  interest:
+    # Current rates (Sep 2024 - Aug 2025)
+    rpiRate: 0.043          # 4.3% - Retail Price Index (base rate)
+    maxRate: 0.073          # 7.3% - RPI + 3% (max rate for high earners)
+    additionalRate: 0.03    # The +3% added for higher earners
+
+    # While studying (before repayment starts)
+    studyingRate: 0.073     # 7.3% (always RPI + 3% while studying)
+
+  # ---------------------------------------------------------------------------
+  # Write-off
+  # Remaining balance written off after 30 years from first April after
+  # leaving course (or April 4 years after course start if part-time)
+  # ---------------------------------------------------------------------------
+  writeOffYears: 30
+
+# =============================================================================
+# OTHER PLAN TYPES (for reference/future expansion)
+# =============================================================================
+plan1:
+  name: "Plan 1"
+  description: "England/Wales before Sep 2012, or NI/Scotland"
+  threshold:
+    yearly: 26065
+    monthly: 2172
+    weekly: 501
+  repaymentRate: 0.09
+  interestRate: 0.032      # Flat 3.2%
+  writeOffYears: 25        # 25 years after first April above threshold
+
+plan4:
+  name: "Plan 4"
+  description: "Scotland (from Sep 1998)"
+  threshold:
+    yearly: 32745
+    monthly: 2728
+    weekly: 629
+  repaymentRate: 0.09
+  interestRate: 0.032      # Flat 3.2%
+  writeOffYears: 30
+
+plan5:
+  name: "Plan 5"
+  description: "England students starting from Aug 2023"
+  threshold:
+    yearly: 25000
+    monthly: 2083
+    weekly: 480
+  repaymentRate: 0.09
+  interestRate: 0.032      # Flat 3.2% (RPI only, no +3%)
+  writeOffYears: 40        # 40 years
+
+postgraduate:
+  name: "Postgraduate Loan"
+  description: "Masters or Doctoral loans"
+  threshold:
+    yearly: 21000
+    monthly: 1750
+    weekly: 403
+  repaymentRate: 0.06      # 6% (not 9%)
+  interestRate: 0.062      # 6.2%
+  writeOffYears: 30
+
+# =============================================================================
+# Historical Tuition Fees (England) - per year
+# =============================================================================
+tuitionFees:
+  - startYear: 1998
+    endYear: 2005
+    annualFee: 1000
+    typicalTotal: 3000    # 3 year degree
+  - startYear: 2006
+    endYear: 2011
+    annualFee: 3000
+    typicalTotal: 9000
+  - startYear: 2012
+    endYear: 2016
+    annualFee: 9000
+    typicalTotal: 27000
+  - startYear: 2017
+    endYear: 2024
+    annualFee: 9250
+    typicalTotal: 27750
+  - startYear: 2025
+    endYear: 2030
+    annualFee: 9535
+    typicalTotal: 28605
+
+# Maintenance loan estimates (3 years, living away from home outside London)
+maintenanceLoan:
+  low: 15000       # ~£5k/year
+  medium: 27000    # ~£9k/year
+  high: 40000      # ~£13k/year (max)
+
+# =============================================================================
+# Historical Interest Rates - Plan 2 (for reference)
+# =============================================================================
+historicalRates:
+  - period: "Sep 2024 - Aug 2025"
+    rate: "4.3% to 7.3%"
+    type: "RPI+3%"
+  - period: "Sep 2023 - Aug 2024"
+    rate: "7.1% to 7.9%"
+    type: "Interest cap"
+  - period: "Sep 2022 - Aug 2023"
+    rate: "6.3% to 6.5%"
+    type: "Interest cap"
+  - period: "Mar 2022 - Aug 2022"
+    rate: "1.5% to 4.5%"
+    type: "RPI+3%"
+  - period: "Sep 2020 - Jun 2021"
+    rate: "2.6% to 5.6%"
+    type: "RPI+3%"
+  - period: "Sep 2019 - Aug 2020"
+    rate: "2.4% to 5.4%"
+    type: "RPI+3%"
