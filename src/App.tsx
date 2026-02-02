@@ -110,10 +110,10 @@ function App() {
       <div className="max-w-[1400px] mx-auto">
         {/* Title - Centered */}
         <h1 className="text-2xl font-bold text-center mb-1">UK Student Loan - <span className="text-green-400">😇 Blessing</span> or <span className="text-red-400">😈 Curse</span>?</h1>
-        <p className="text-sm text-gray-300 text-center mb-2 max-w-5xl mx-auto">
+        <p className="hidden sm:block text-sm text-gray-300 text-center mb-2 max-w-5xl mx-auto">
           <span className="text-amber-400 italic">"Just 9% above £27k, and it's written off after 30 years — isn't that great?"</span> What they don't say: interest keeps climbing whether you're paying £0 or £50/month, and you could pay 2-3× back over 30 years. <span className="text-white font-medium">Take a personal loan and clear it fast, or ride the 9% and hope for write-off?</span> This answers that.
         </p>
-        <p className="text-xs text-center mb-4"><span className="text-green-400">😇 Blessing</span><span className="text-gray-400"> = student loan was cheaper than a 5% personal loan</span> <span className="text-gray-500 mx-2">•</span> <span className="text-red-400">😈 Curse</span><span className="text-gray-400"> = you'd have paid less borrowing elsewhere</span></p>
+        <p className="text-xs text-center mb-4"><span className="text-green-400">😇 Blessing</span><span className="text-gray-400"> = cheaper than 5% loan</span> <span className="text-gray-500 mx-2">•</span> <span className="text-red-400">😈 Curse</span><span className="text-gray-400"> = paid more</span></p>
 
         {/* Controls Row */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
@@ -182,7 +182,7 @@ function App() {
                 step={1000}
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-32 accent-green-500"
+                className="w-20 sm:w-32 accent-green-500"
               />
             </div>
           </TutorialTip>
@@ -230,13 +230,15 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 mb-4">
           <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-3 lg:col-span-5`}>
             <h2 className="text-xs font-semibold mb-2">Debt Over Time</h2>
-            <DebtChart data={result.yearByYear} width={500} height={170} />
+            <div className="w-full overflow-x-auto">
+              <DebtChart data={result.yearByYear} width={500} height={170} />
+            </div>
           </div>
-          <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-3 lg:col-span-3`}>
+          <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-3 lg:col-span-3 hidden sm:block`}>
             <h2 className="text-sm font-semibold mb-2">Loan vs Repayment</h2>
             <LoanComparisonChart summary={result.summary} initialDebt={loanAmount} width={200} height={170} />
           </div>
-          <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-3 lg:col-span-2`}>
+          <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-3 lg:col-span-2 hidden md:block`}>
             <h2 className="text-xs font-semibold mb-2">What You Repay</h2>
             <PaymentBreakdownPie summary={result.summary} initialDebt={loanAmount} width={160} height={170} />
           </div>
@@ -299,15 +301,15 @@ function App() {
         {/* Main Content: Salary + Table side by side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Left: Salary Progression (Config) */}
-          <div className={`${darkMode ? 'bg-indigo-950/40 border border-indigo-600/70' : 'bg-indigo-50 border border-indigo-400'} rounded-lg p-6 relative`}>
+          <div className={`${darkMode ? 'bg-indigo-950/40 border border-indigo-600/70' : 'bg-indigo-50 border border-indigo-400'} rounded-lg p-4 sm:p-6 relative`}>
             <div className="absolute -top-2 left-3 px-2 text-[10px] font-medium uppercase tracking-wider bg-indigo-600 text-white rounded">
               🎮 Play Here
             </div>
-            <h2 className="text-sm font-semibold mb-4 mt-1 text-center">👔 Choose Your Profession & Salary Growth</h2>
-            <div className="flex gap-6 justify-center">
+            <h2 className="text-sm font-semibold mb-4 mt-1 text-center">👔 Choose Profession & Salary</h2>
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 justify-center">
               {/* Left: Career Chips */}
-              <TutorialTip label="Pick a career (red = pay more, green = pay less)" enabled={tutorialMode} position="right">
-                <div className="flex flex-col gap-1.5 min-w-[240px]">
+              <TutorialTip label="Pick a career" enabled={tutorialMode} position="right">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-1.5 lg:min-w-[240px]">
                   {[...careerComparison].reverse().sort((a, b) => a.id === 'nursing' ? -1 : b.id === 'nursing' ? 1 : 0).map((career, index) => {
                     const total = careerComparison.length
                     const ratio = index / (total - 1)
@@ -336,7 +338,7 @@ function App() {
               </TutorialTip>
 
               {/* Right: Chart + Inputs below */}
-              <div className="flex-1 flex flex-col items-center">
+              <div className="flex-1 flex flex-col items-center w-full overflow-x-auto">
                 <TutorialTip label="Drag points to adjust" enabled={tutorialMode} position="top">
                   <SalaryChart
                     milestones={milestones}
@@ -416,7 +418,7 @@ function App() {
         </div>
 
         {/* Bottom: Info Panels + Career Comparison - Full Width */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-4">
           {/* Which Plan? */}
           <div className={`${darkMode ? 'bg-gray-800/50' : 'bg-white shadow'} rounded-lg p-4`}>
             <h2 className="text-sm font-semibold mb-2">🗺️ Which Plan?</h2>
@@ -510,8 +512,8 @@ function App() {
           </div>
 
           {/* Key Insights - spans 4 cols */}
-          <div className="col-span-2 lg:col-span-4 bg-gradient-to-r from-gray-800/50 to-gray-800/30 rounded-lg px-4 py-2">
-            <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-4 bg-gradient-to-r from-gray-800/50 to-gray-800/30 rounded-lg px-4 py-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
               <span className="text-red-400">😈 <strong>Curse:</strong> <span className="text-gray-300">£40-65k pay 30yrs, never clear</span></span>
               <span className="text-red-400">📈 <strong>Early Career:</strong> <span className="text-gray-300">Interest outpaces repayments</span></span>
               <span className="text-green-400">😇 <strong>Blessing:</strong> <span className="text-gray-300">Pay &lt;1.25x loan</span></span>
@@ -521,7 +523,7 @@ function App() {
         </div>
 
         {/* Quick Reference - Compact */}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
+        <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-500">
           <span>📌 {PLANS.find(p => p.id === selectedPlan)?.name}: {PLANS.find(p => p.id === selectedPlan)?.years}</span>
           <span>📌 Tuition ({startYear}): £{getTuitionForYear(startYear).annual.toLocaleString()}/yr</span>
           <span>📌 Threshold: £{planConfig.threshold.toLocaleString()}</span>
